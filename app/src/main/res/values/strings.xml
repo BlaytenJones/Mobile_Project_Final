@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">OpenStreetMap2024</string>
+    <string name="descHint">Type in your description here</string>
+</resources>
