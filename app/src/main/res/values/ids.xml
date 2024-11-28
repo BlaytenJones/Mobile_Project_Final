@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="mainLayout" type="id" />
+    <item name="textView3" type="id" />
+    <item name="editTextTextEmailAddress" type="id" />
+    <item name="username" type="id" />
+    <item name="editTextTextPassword" type="id" />
+    <item name="password" type="id" />
+    <item name="btnLogInWithGoogle" type="id" />
+    <item name="btnCreateUser" type="id" />
+</resources>
