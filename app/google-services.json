@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "75698183380",
+    "project_id": "mobile-final-project-5aff0",
+    "storage_bucket": "mobile-final-project-5aff0.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:75698183380:android:ef787a56e7031a42a42f41",
+        "android_client_info": {
+          "package_name": "edu.uark.ahnelson.openstreetmap2024"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA-1-AXugY5cy754S3oexN1lMuwqPQMWZw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

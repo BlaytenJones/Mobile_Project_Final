@@ -53,6 +53,8 @@ class CameraActivity() : AppCompatActivity() {
     var lat: Double = 0.0
     var mainId = 0
     var photoAdded = false
+    var QR = ""
+    var uid = -1
 
     var currentPhotoPath = ""
     lateinit var imageView: ImageView
@@ -117,6 +119,8 @@ class CameraActivity() : AppCompatActivity() {
         newInst = intent.getBooleanExtra("NEW",false)
         lat = intent.getDoubleExtra("LAT", 0.0)
         lon = intent.getDoubleExtra("LON",0.0)
+        QR = intent.getStringExtra("QR").toString()
+        uid = intent.getIntExtra("UID",-1)
         editDesc = findViewById(R.id.edit_desc)
         findViewById<FloatingActionButton>(R.id.submit).setOnClickListener {
             savePicture()
@@ -209,11 +213,11 @@ class CameraActivity() : AppCompatActivity() {
             galleryAddPic(currentPhotoPath)
             if(newInst){
                 newPinViewModel.insert(
-                    Pin(null, currentPhotoPath, editDesc.text.toString(), pinsDate, lat, lon, tempId)
+                    Pin(null, currentPhotoPath, editDesc.text.toString(), pinsDate, lat, lon, QR, tempId, uid)
                 )
             }else{
                 newPinViewModel.update(
-                    Pin(mainId, currentPhotoPath, editDesc.text.toString(), pinsDate, lat, lon, -1)
+                    Pin(mainId, currentPhotoPath, editDesc.text.toString(), pinsDate, lat, lon, QR, null, uid)
                 )
             }
             finish()

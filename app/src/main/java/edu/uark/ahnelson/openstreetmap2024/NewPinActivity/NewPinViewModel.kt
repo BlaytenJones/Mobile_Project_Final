@@ -6,10 +6,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import edu.uark.ahnelson.openstreetmap2024.Repository.Pin
-import edu.uark.ahnelson.openstreetmap2024.Repository.PinRepository
+import edu.uark.ahnelson.openstreetmap2024.Repository.JSONPlaceholderRepository
 import kotlinx.coroutines.launch
 
-class NewPinViewModel(private val repository: PinRepository) : ViewModel() {
+class NewPinViewModel(private val repository: JSONPlaceholderRepository) : ViewModel() {
     /**
      * Launching a new coroutine to insert the data in a non-blocking way
      */
@@ -29,27 +29,23 @@ class NewPinViewModel(private val repository: PinRepository) : ViewModel() {
     }
 
     fun insert(pin: Pin) = viewModelScope.launch {
-        repository.insert(pin)
+        repository.insertPinIntoRemoteDatasource(pin)
     }
 
     fun update(pin: Pin) = viewModelScope.launch {
-        repository.update(pin)
-    }
-
-    fun delete(pinId: Int) = viewModelScope.launch {
-        repository.delete(pinId)
+        repository.updatePinInRemoteDatasource(pin)
     }
 
     fun getTempId(pinId: Int){
         viewModelScope.launch {
             repository.allPins.collect{ pins ->
-                _pinTemp.value = pins.values.find { it.tempID == pinId }
+                _pinTemp.value = pins.values.find { it.localId == pinId }
             }
         }
     }
 }
 
-class NewPinViewModelFactory(private val repository: PinRepository) : ViewModelProvider.Factory {
+class NewPinViewModelFactory(private val repository: JSONPlaceholderRepository) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(NewPinViewModel::class.java)) {
             @Suppress("UNCHECKED_CAST")

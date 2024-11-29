@@ -127,10 +127,18 @@ class SignInActivity : AppCompatActivity() {
     public override fun onStart() {
         super.onStart()
         // Check if user is signed in (non-null) and update UI accordingly.
-
+        val currentUser = auth.currentUser
+        if (currentUser != null) {
+            Toast.makeText(this, "User signed in!", Toast.LENGTH_LONG).show()
+            Log.d(TAG, "User UUID:${auth.currentUser?.uid}")
+            val launchSecondActivityIntent = Intent(this,MapsActivity::class.java)
+            launchSecondActivityIntent.putExtra("USER_ID", currUID)
+            startActivity(launchSecondActivityIntent)
+            finish()
+        }
     }
 
-    fun createUserWithUsernamePassword(){
+    private fun createUserWithUsernamePassword(){
         val email = editUser.text.toString()
         val password = editPass.text.toString()
         auth.createUserWithEmailAndPassword(email, password)
@@ -145,7 +153,7 @@ class SignInActivity : AppCompatActivity() {
                     Log.d(TAG,"User UUID:${auth.currentUser.toString()}")
                     sharedPreferences = getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
                     currUID = sharedPreferences.getInt(CURR_UID, 0) + 1
-                    userViewModel.insertU(email, currUID, this)
+                    userViewModel.insertU(email, currUID)
                     with(sharedPreferences.edit()) {
                         putInt(CURR_UID, currUID)
                         apply() // Apply the changes asynchronously

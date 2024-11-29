@@ -11,9 +11,10 @@ data class Pin(
     @Expose @ColumnInfo(name="filepath") val filepath:String,
     @Expose @ColumnInfo(name="desc") val desc:String,
     @Expose @ColumnInfo(name="date") val date:String,
-    @Expose @ColumnInfo(name="latitude") val lat:Double,
-    @Expose @ColumnInfo(name="longitude") val lon:Double,
+    @Expose @ColumnInfo(name="lat") val lat:Double,
+    @Expose @ColumnInfo(name="lon") val lon:Double,
     @Expose @ColumnInfo(name="QRCode") val QRCode:String,
+    @Expose @ColumnInfo(name = "id") val id: Int?,
     @Expose @ColumnInfo(name="uid") val uid:Int,
 ) {
 }

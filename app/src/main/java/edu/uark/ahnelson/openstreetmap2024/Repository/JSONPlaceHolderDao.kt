@@ -8,24 +8,21 @@ import androidx.room.Query
 import androidx.room.Update
 import kotlinx.coroutines.flow.Flow
 
-@Dao
-interface PinDao {
 
+@Dao
+interface JSONPlaceHolderDao {
     @MapInfo(keyColumn = "id")
     @Query("SELECT * FROM pin_table ORDER BY date ASC")
-    fun getOrderedTasks(): Flow<Map<Int, Pin>>
+    fun getOrderedPins(): Flow<Map<Int, Pin>>
 
     @Update
-    suspend fun update(task: Pin)
+    suspend fun update(pin: Pin)
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insert(task: Pin)
+    suspend fun insert(pin: Pin)
 
-    @Query("DELETE FROM pin_table WHERE id = :pinId")
+    @Query("DELETE FROM pin_table WHERE localId = :pinId")
     suspend fun delete(pinId: Int)
-
-    @Query("SELECT tempID FROM pin_table WHERE id = :pinId")
-    fun getTempId(pinId: Int): Int?
 
     @Query("DELETE FROM pin_table")
     suspend fun deleteAll()
