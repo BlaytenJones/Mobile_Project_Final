@@ -1,16 +1,13 @@
 package edu.uark.ahnelson.openstreetmap2024.Repository
 
-import android.content.Context
 import android.util.Log
 import androidx.annotation.WorkerThread
-import androidx.room.ColumnInfo
-import androidx.room.PrimaryKey
 import com.google.firebase.Firebase
 import com.google.firebase.firestore.firestore
-import com.google.gson.annotations.Expose
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.Flow
+import androidx.activity.viewModels
 import kotlinx.coroutines.launch
 
 class JSONPlaceholderRepository(private val jsonPlaceHolderDao: JSONPlaceHolderDao) {

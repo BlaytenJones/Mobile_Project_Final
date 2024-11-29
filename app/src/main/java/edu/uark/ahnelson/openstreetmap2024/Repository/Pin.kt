@@ -4,17 +4,18 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.google.gson.annotations.Expose
+import com.google.gson.annotations.SerializedName
 
 @Entity(tableName = "pin_table")
 data class Pin(
-    @PrimaryKey @ColumnInfo(name="localId") val localId: Int?,
-    @Expose @ColumnInfo(name="filepath") val filepath:String,
-    @Expose @ColumnInfo(name="desc") val desc:String,
-    @Expose @ColumnInfo(name="date") val date:String,
-    @Expose @ColumnInfo(name="lat") val lat:Double,
-    @Expose @ColumnInfo(name="lon") val lon:Double,
-    @Expose @ColumnInfo(name="QRCode") val QRCode:String,
-    @Expose @ColumnInfo(name = "id") val id: Int?,
-    @Expose @ColumnInfo(name="uid") val uid:Int,
+    @PrimaryKey @SerializedName("localId") @ColumnInfo(name = "localId") val localId: Int? = null, // nullable and default
+    @Expose @SerializedName("filepath") @ColumnInfo(name = "filepath") val filepath: String = "", // default value
+    @Expose @SerializedName("desc") @ColumnInfo(name = "desc") val desc: String = "", // default value
+    @Expose @SerializedName("date") @ColumnInfo(name = "date") val date: String = "", // default value
+    @Expose @SerializedName("lat") @ColumnInfo(name = "lat") val lat: Double = 0.0, // default value
+    @Expose @SerializedName("lon") @ColumnInfo(name = "lon") val lon: Double = 0.0, // default value
+    @Expose @SerializedName("QRCode") @ColumnInfo(name = "QRCode") val QRCode: String = "", // default value
+    @Expose @SerializedName("id") @ColumnInfo(name = "id") val id: Int? = null, // nullable and default
+    @Expose @SerializedName("uid") @ColumnInfo(name = "uid") val uid: Int = 0 // default value
 ) {
 }

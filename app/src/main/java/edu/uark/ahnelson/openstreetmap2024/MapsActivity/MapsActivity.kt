@@ -100,10 +100,14 @@ class MapsActivity : AppCompatActivity() {
         locationProviderClient = LocationServices.getFusedLocationProviderClient(this)
         checkForLocationPermission()
 
-        pinViewModel.allPins.observe(this) { pinsMap ->
-            pinsMap.forEach { (id, pin) ->
-                val geoPoint = GeoPoint(pin.lat, pin.lon)
-                mapsFragment.addMarker(geoPoint, id, false) // Use GeoPoint and the primary key ID
+        pinViewModel.getPinsFromRemoteDatasource() { retrievedPins ->
+            if (retrievedPins.isNotEmpty()) {
+                retrievedPins.forEach { pin ->
+                    val geoPoint = GeoPoint(pin.lat, pin.lon)
+                    mapsFragment.addMarker(geoPoint, -1, false)
+                }
+            } else {
+                Log.d("PinData", "No pins retrieved")
             }
         }
 
