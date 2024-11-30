@@ -93,18 +93,23 @@ class MapsActivity : AppCompatActivity() {
         Configuration.getInstance().load(this, getSharedPreferences(
             "${packageName}_preferences", Context.MODE_PRIVATE))
 
+        val userID = intent.getIntExtra("USER_ID", -1)
+
         mapsFragment = supportFragmentManager.findFragmentById(R.id.fragmentContainerView)
-                as OpenStreetMapFragment? ?:OpenStreetMapFragment.newInstance().also{
-            replaceFragmentInActivity(it,R.id.fragmentContainerView)
+                as OpenStreetMapFragment? ?: OpenStreetMapFragment.newInstance(userID).also {
+            replaceFragmentInActivity(it, R.id.fragmentContainerView)
         }
+
+        mapsFragment.setRefreshCallback(::refreshPins)
+
         locationProviderClient = LocationServices.getFusedLocationProviderClient(this)
         checkForLocationPermission()
+
 
         pinViewModel.getPinsFromRemoteDatasource() { retrievedPins ->
             if (retrievedPins.isNotEmpty()) {
                 retrievedPins.forEach { pin ->
-                    val geoPoint = GeoPoint(pin.lat, pin.lon)
-                    mapsFragment.addMarker(geoPoint, -1, false)
+                    mapsFragment.addMarker(pin)
                 }
             } else {
                 Log.d("PinData", "No pins retrieved")
@@ -161,6 +166,19 @@ class MapsActivity : AppCompatActivity() {
             //and request location updates, setting the boolean equal to whether this was successful
             locationRequestsEnabled =
                 createLocationRequest(this, locationProviderClient, mLocationCallback)
+        }
+    }
+
+     fun refreshPins() {
+        pinViewModel.getPinsFromRemoteDatasource { retrievedPins ->
+            if (retrievedPins.isNotEmpty()) {
+                mapsFragment.clearMarkers() // Clear existing markers if needed
+                retrievedPins.forEach { pin ->
+                    mapsFragment.addMarker(pin)
+                }
+            } else {
+                Log.d("PinData", "No pins retrieved")
+            }
         }
     }
 }

@@ -40,21 +40,44 @@ import java.util.Locale
 import kotlin.math.roundToInt
 
 class CameraActivity() : AppCompatActivity() {
+
+    companion object {
+        var refreshCallback: (() -> Unit)? = null
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        refreshCallback = null // Prevent memory leaks
+    }
+
     var pinsDate = ""
     private lateinit var editDesc: EditText
+
+    private var refreshCallback: (() -> Unit)? = null
+
+    // Method to set the callback
+    fun setRefreshCallback(callback: () -> Unit) {
+        refreshCallback = callback
+    }
+
+    // Example method to trigger the refresh
+    fun triggerRefresh() {
+        refreshCallback?.invoke()
+    }
 
     private lateinit var pin: Pin
     val newPinViewModel: NewPinViewModel by viewModels {
         NewPinViewModelFactory((application as PinsApplication).repository)
     }
     var newInst = false
-    var tempId = -1
     var lon: Double = 0.0
     var lat: Double = 0.0
-    var mainId = 0
     var photoAdded = false
     var QR = ""
     var uid = -1
+    var currUid = -1
+    var desc = ""
+    var id = -1
 
     var currentPhotoPath = ""
     lateinit var imageView: ImageView
@@ -114,13 +137,9 @@ class CameraActivity() : AppCompatActivity() {
         imageView = findViewById(R.id.imageView)
         val fab = findViewById<FloatingActionButton>(R.id.fabTakePicture)
         val timestamp = findViewById<TextView>(R.id.timestamp)
-        mainId = intent.getIntExtra("EXTRA_ID",-1)
-        tempId = intent.getIntExtra("TEMP_ID",-1)
         newInst = intent.getBooleanExtra("NEW",false)
         lat = intent.getDoubleExtra("LAT", 0.0)
         lon = intent.getDoubleExtra("LON",0.0)
-        QR = intent.getStringExtra("QR").toString()
-        uid = intent.getIntExtra("UID",-1)
         editDesc = findViewById(R.id.edit_desc)
         findViewById<FloatingActionButton>(R.id.submit).setOnClickListener {
             savePicture()
@@ -133,25 +152,20 @@ class CameraActivity() : AppCompatActivity() {
                 takeAPicture()
             }
         }else{
-            //otherwise, do not let the user change the picture
-            fab.visibility = View.INVISIBLE
-            if(tempId!=-1){
-                //The task was made during the lifetime of the activity
-                newPinViewModel.getTempId(tempId)
-            }else{
-                //The task is from the database
-                newPinViewModel.start(mainId)
+            id = intent.getIntExtra("ID",-1)
+            currUid = intent.getIntExtra("CURR_UID",-1)
+            uid = intent.getIntExtra("UID",-1)
+            desc = intent.getStringExtra("DESC").toString()
+            editDesc.setText(desc)
+            //else just look at it
+            if(uid == currUid){
+                //allow editing if it is the user's post
+                editDesc.isEnabled = true;
             }
-            newPinViewModel.pin.observe(this){
-                if(it != null){
-                    if(tempId!=-1) mainId = it.id!! //get main ID if it is made in the lifetime
-                    pinsDate = it.date
-                    editDesc.setText(it.desc)
-                    timestamp.text = pinsDate
-                    currentPhotoPath = it.filepath
-                    setPic()
-                }
-            }
+            QR = intent.getStringExtra("QR").toString()
+            currentPhotoPath = intent.getStringExtra("FILEPATH").toString()
+            setPic()
+            timestamp.text = intent.getStringExtra("DATE").toString()
         }
     }
 
@@ -211,14 +225,17 @@ class CameraActivity() : AppCompatActivity() {
     private fun savePicture(){
         if(photoAdded) {
             galleryAddPic(currentPhotoPath)
-            if(newInst){
-                newPinViewModel.insert(
-                    Pin(null, currentPhotoPath, editDesc.text.toString(), pinsDate, lat, lon, QR, tempId, uid)
-                )
-            }else{
-                newPinViewModel.update(
-                    Pin(mainId, currentPhotoPath, editDesc.text.toString(), pinsDate, lat, lon, QR, null, uid)
-                )
+            if(uid == currUid){
+                if(newInst){
+                    newPinViewModel.insert(
+                        Pin(id, currentPhotoPath, editDesc.text.toString(), pinsDate, lat, lon, QR, null, uid)
+                    )
+                }else{
+                    newPinViewModel.update(
+                        Pin(id, currentPhotoPath, editDesc.text.toString(), pinsDate, lat, lon, QR, null, uid)
+                    )
+                }
+                refreshCallback?.invoke()
             }
             finish()
         }

@@ -14,6 +14,7 @@ import androidx.fragment.app.Fragment
 import edu.uark.ahnelson.openstreetmap2024.NewPinActivity.CameraActivity
 import edu.uark.ahnelson.openstreetmap2024.PinsApplication
 import edu.uark.ahnelson.openstreetmap2024.R
+import edu.uark.ahnelson.openstreetmap2024.Repository.Pin
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.CustomZoomButtonsController
@@ -30,16 +31,29 @@ import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay
 
 class OpenStreetMapFragment : Fragment(), Marker.OnMarkerClickListener {
 
+    private var refreshCallback: (() -> Unit)? = null
+
+    // Method to set the callback
+    fun setRefreshCallback(callback: () -> Unit) {
+        refreshCallback = callback
+    }
+
+    // Example method to trigger the refresh
+    fun triggerRefresh() {
+        refreshCallback?.invoke()
+    }
+
     private lateinit var mMap: MapView
     private lateinit var mLocationOverlay: MyLocationNewOverlay
     private lateinit var mCompassOverlay: CompassOverlay
     private lateinit var cameraButton: AppCompatImageButton
     private var curLocation = GeoPoint(34.74, -92.28)
-    private var currID = 0
+    private var userId: Int? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
+            userId = it.getInt("USER_ID")
         }
     }
 
@@ -54,13 +68,13 @@ class OpenStreetMapFragment : Fragment(), Marker.OnMarkerClickListener {
 
         cameraButton.setOnClickListener {
             val intent = Intent(requireActivity(), CameraActivity::class.java)
-            intent.putExtra("TEMP_ID", currID)
             intent.putExtra("NEW",true)
             intent.putExtra("LAT", curLocation.latitude)
             intent.putExtra("LON", curLocation.longitude)
-            addMarker(curLocation, currID, true)
+            intent.putExtra("UID", userId)
+            intent.putExtra("CURR_UID", userId)
+            CameraActivity.refreshCallback = ::triggerRefresh
             startActivity(intent)
-            currID++
         }
 
         setupMapOptions()
@@ -135,16 +149,16 @@ class OpenStreetMapFragment : Fragment(), Marker.OnMarkerClickListener {
 
     }
 
-    fun addMarker(geoPoint: GeoPoint, id: Int, new: Boolean) {
+    fun addMarker(pin: Pin) {
+        val geoPoint = GeoPoint(pin.lat, pin.lon)
         val startMarker = Marker(mMap)
         startMarker.position = geoPoint
         startMarker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM)
         startMarker.setOnMarkerClickListener(this)
         startMarker.id = id.toString()
-        startMarker.title = (if (new) "New" else "Old")
+        startMarker.relatedObject = pin
         startMarker.icon = ResourcesCompat.getDrawable(resources, R.drawable.map_pin_small, null)
         mMap.getOverlays().add(startMarker)
-
     }
 
     fun clearMarkers() {
@@ -166,13 +180,23 @@ class OpenStreetMapFragment : Fragment(), Marker.OnMarkerClickListener {
         marker?.id?.let { Log.d("OpenStreetMapFragment", it) }
         val intent = Intent(requireActivity(), CameraActivity::class.java)
         //determine if the marker was made during the lifetime
-        if(marker?.title == "New") {
-            intent.putExtra("TEMP_ID", marker?.id?.toInt())
-        }else{
-            intent.putExtra("EXTRA_ID", marker?.id?.toInt())
-        }
         intent.putExtra("LAT",marker?.position?.latitude)
         intent.putExtra("LON",marker?.position?.longitude)
+        intent.putExtra("NEW", false)
+        val pin = marker?.relatedObject as? Pin
+        if (pin != null) {
+            // Add Pin object's attributes to the intent
+            intent.putExtra("DESC", pin.desc)
+            intent.putExtra("DATE", pin.date)
+            intent.putExtra("QR_CODE", pin.QRCode)
+            intent.putExtra("FILEPATH", pin.filepath)
+            intent.putExtra("UID", pin.uid)
+            intent.putExtra("CURR_UID", userId)
+            intent.putExtra("ID", pin.id)
+        } else {
+            Log.d("OpenStreetMapFragment", "No related Pin object found for this marker")
+        }
+        CameraActivity.refreshCallback = ::triggerRefresh
         startActivity(intent)
         return true
     }
@@ -185,11 +209,14 @@ class OpenStreetMapFragment : Fragment(), Marker.OnMarkerClickListener {
          * @return A new instance of fragment OpenStreetMapFragment.
          */
         @JvmStatic
-        fun newInstance() =
+        fun newInstance(userID: Int) =
             OpenStreetMapFragment().apply {
-                arguments = Bundle().apply {
+                val fragment = OpenStreetMapFragment()
+                val args = Bundle().apply {
+                    putInt("USER_ID", userID)
                 }
+                fragment.arguments = args
+                return fragment
             }
     }
-
 }
