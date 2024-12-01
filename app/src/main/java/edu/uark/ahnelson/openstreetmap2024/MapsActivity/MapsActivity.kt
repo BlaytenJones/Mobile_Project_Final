@@ -47,16 +47,6 @@ class MapsActivity : AppCompatActivity() {
     private val pinViewModel: PinViewModel by viewModels {
         PinViewModelFactory((application as PinsApplication).repository)
     }
-    /**
-    Callback function passed through to RecyclerViewItems to launch
-    A new activity based on id
-    @param id id of the item that is clicked
-     */
-    fun launchNewPinActivity(id:Int){
-        val secondActivityIntent = Intent(this, CameraActivity::class.java)
-        secondActivityIntent.putExtra("EXTRA_ID",id)
-        this.startActivity(secondActivityIntent)
-    }
 
     val requestPermissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestMultiplePermissions()
@@ -93,13 +83,15 @@ class MapsActivity : AppCompatActivity() {
         Configuration.getInstance().load(this, getSharedPreferences(
             "${packageName}_preferences", Context.MODE_PRIVATE))
 
-        val userID = intent.getIntExtra("USER_ID", -1)
+        val userID = intent.getStringExtra("USER_ID").toString()
+        Log.d("UIDTEST", "User ID: $userID")
 
         mapsFragment = supportFragmentManager.findFragmentById(R.id.fragmentContainerView)
-                as OpenStreetMapFragment? ?: OpenStreetMapFragment.newInstance(userID).also {
+                as OpenStreetMapFragment? ?: OpenStreetMapFragment.newInstance().also {
             replaceFragmentInActivity(it, R.id.fragmentContainerView)
         }
 
+        mapsFragment.setUserId(userID)
         mapsFragment.setRefreshCallback(::refreshPins)
 
         locationProviderClient = LocationServices.getFusedLocationProviderClient(this)

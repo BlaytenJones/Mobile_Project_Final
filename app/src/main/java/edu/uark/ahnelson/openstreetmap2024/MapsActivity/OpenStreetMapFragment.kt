@@ -7,12 +7,10 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.activity.viewModels
 import androidx.appcompat.widget.AppCompatImageButton
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import edu.uark.ahnelson.openstreetmap2024.NewPinActivity.CameraActivity
-import edu.uark.ahnelson.openstreetmap2024.PinsApplication
 import edu.uark.ahnelson.openstreetmap2024.R
 import edu.uark.ahnelson.openstreetmap2024.Repository.Pin
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
@@ -32,10 +30,16 @@ import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay
 class OpenStreetMapFragment : Fragment(), Marker.OnMarkerClickListener {
 
     private var refreshCallback: (() -> Unit)? = null
+    private var userId: String = ""
 
     // Method to set the callback
     fun setRefreshCallback(callback: () -> Unit) {
         refreshCallback = callback
+    }
+
+    fun setUserId(userID: String) {
+        Log.d("UIDTEST", "Creating new instance with userID: $userID")
+        this.userId = userID
     }
 
     // Example method to trigger the refresh
@@ -48,14 +52,6 @@ class OpenStreetMapFragment : Fragment(), Marker.OnMarkerClickListener {
     private lateinit var mCompassOverlay: CompassOverlay
     private lateinit var cameraButton: AppCompatImageButton
     private var curLocation = GeoPoint(34.74, -92.28)
-    private var userId: Int? = null
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            userId = it.getInt("USER_ID")
-        }
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -73,7 +69,7 @@ class OpenStreetMapFragment : Fragment(), Marker.OnMarkerClickListener {
             intent.putExtra("LON", curLocation.longitude)
             intent.putExtra("UID", userId)
             intent.putExtra("CURR_UID", userId)
-            CameraActivity.refreshCallback = ::triggerRefresh
+            CameraActivity.registerRefreshCallback(::triggerRefresh)
             startActivity(intent)
         }
 
@@ -196,27 +192,18 @@ class OpenStreetMapFragment : Fragment(), Marker.OnMarkerClickListener {
         } else {
             Log.d("OpenStreetMapFragment", "No related Pin object found for this marker")
         }
-        CameraActivity.refreshCallback = ::triggerRefresh
+        CameraActivity.registerRefreshCallback(::triggerRefresh)
         startActivity(intent)
         return true
     }
 
     companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-
-         * @return A new instance of fragment OpenStreetMapFragment.
-         */
         @JvmStatic
-        fun newInstance(userID: Int) =
-            OpenStreetMapFragment().apply {
-                val fragment = OpenStreetMapFragment()
-                val args = Bundle().apply {
-                    putInt("USER_ID", userID)
+        fun newInstance(): OpenStreetMapFragment {
+            return OpenStreetMapFragment().apply {
+                arguments = Bundle().apply {
                 }
-                fragment.arguments = args
-                return fragment
             }
+        }
     }
 }

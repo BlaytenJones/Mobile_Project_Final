@@ -28,7 +28,7 @@ class PinViewModel(private val repository: JSONPlaceholderRepository) : ViewMode
         repository.insertPinIntoRemoteDatasource(pin)
     }
 
-    fun insertU(email: String, uid: Int) = viewModelScope.launch {
+    fun insertU(email: String, uid: String) = viewModelScope.launch {
         repository.insertUserIntoRemoteDatabase(email, uid)
     }
 

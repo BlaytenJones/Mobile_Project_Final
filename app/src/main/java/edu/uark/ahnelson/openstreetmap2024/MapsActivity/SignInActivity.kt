@@ -3,7 +3,6 @@ package edu.uark.ahnelson.openstreetmap2024.MapsActivity
 import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences
 import android.graphics.drawable.AnimationDrawable
 import android.os.Bundle
 import android.util.Log
@@ -34,10 +33,9 @@ import edu.uark.ahnelson.openstreetmap2024.Repository.User
 import edu.uark.ahnelson.openstreetmap2024.PinsApplication
 
 class SignInActivity : AppCompatActivity() {
-    private val TAG = "MainActivity"
+    private val TAG = "SIGNIN"
     private lateinit var auth: FirebaseAuth
     private lateinit var oneTapClient: SignInClient
-    private lateinit var signInRequest: BeginSignInRequest
     private var showOneTapUI = true
 
     private lateinit var editUser: EditText
@@ -86,10 +84,7 @@ class SignInActivity : AppCompatActivity() {
         }
     }
 
-    private lateinit var sharedPreferences: SharedPreferences
-    private val PREFS_NAME = "UserPrefs"
-    private val CURR_UID = "currUID"
-    var currUID = 0
+    var currUID = ""
 
     private val userViewModel: PinViewModel by viewModels {
         PinViewModelFactory((application as PinsApplication).repository)
@@ -132,7 +127,7 @@ class SignInActivity : AppCompatActivity() {
             Toast.makeText(this, "User signed in!", Toast.LENGTH_LONG).show()
             Log.d(TAG, "User UUID:${auth.currentUser?.uid}")
             val launchSecondActivityIntent = Intent(this,MapsActivity::class.java)
-            launchSecondActivityIntent.putExtra("USER_ID", currUID)
+            launchSecondActivityIntent.putExtra("USER_ID", auth.currentUser?.uid)
             startActivity(launchSecondActivityIntent)
             finish()
         }
@@ -151,15 +146,9 @@ class SignInActivity : AppCompatActivity() {
                     //finish()
                     Toast.makeText(this,"User signed in!",Toast.LENGTH_LONG).show()
                     Log.d(TAG,"User UUID:${auth.currentUser.toString()}")
-                    sharedPreferences = getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
-                    currUID = sharedPreferences.getInt(CURR_UID, 0) + 1
-                    userViewModel.insertU(email, currUID)
-                    with(sharedPreferences.edit()) {
-                        putInt(CURR_UID, currUID)
-                        apply() // Apply the changes asynchronously
-                    }
+                    auth.currentUser?.uid?.let { userViewModel.insertU(email, it) }
                     val launchSecondActivityIntent = Intent(this,MapsActivity::class.java)
-                    launchSecondActivityIntent.putExtra("USER_ID", currUID)
+                    launchSecondActivityIntent.putExtra("USER_ID", auth.currentUser?.uid)
                     startActivity(launchSecondActivityIntent)
                     finish()
                 } else {
@@ -186,7 +175,7 @@ class SignInActivity : AppCompatActivity() {
                     Toast.makeText(this,"User signed in!",Toast.LENGTH_LONG).show()
                     Log.d(TAG,"User UUID:${auth.currentUser.toString()}")
                     val launchSecondActivityIntent = Intent(this,MapsActivity::class.java)
-                    launchSecondActivityIntent.putExtra("USER_EMAIL", email)
+                    launchSecondActivityIntent.putExtra("USER_ID", auth.currentUser?.uid)
                     startActivity(launchSecondActivityIntent)
                     finish()
                 } else {

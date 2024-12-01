@@ -63,7 +63,7 @@ class JSONPlaceholderRepository(private val jsonPlaceHolderDao: JSONPlaceHolderD
 
     @Suppress("RedundantSuspendModifier")
     @WorkerThread
-    suspend fun insertUserIntoRemoteDatabase(email:String, currUID:Int){
+    suspend fun insertUserIntoRemoteDatabase(email:String, currUID:String){
         db.collection("users")
             .add(User(email, currUID, emptyList(), emptyList()))
             .addOnSuccessListener { documentReference ->
@@ -80,7 +80,7 @@ class JSONPlaceholderRepository(private val jsonPlaceHolderDao: JSONPlaceHolderD
         val usersRef = db.collection("pins")
 
         // Query for the pin based on localId and uid
-        Log.d("UPDATE", pin.uid.toString() + " " + pin.localId.toString())
+        Log.d("UPDATE", pin.uid + " " + pin.localId.toString())
         val query = usersRef
             .whereEqualTo("localId", pin.localId)
             .whereEqualTo("uid", pin.uid)
@@ -120,7 +120,7 @@ class JSONPlaceholderRepository(private val jsonPlaceHolderDao: JSONPlaceHolderD
 
     @Suppress("RedundantSuspendModifier")
     @WorkerThread
-    suspend fun deletePinFromRemoteDatasource(localId:Int, uid: Int){
+    suspend fun deletePinFromRemoteDatasource(localId:Int, uid: String){
         val usersRef = db.collection("pins")
         val query = usersRef.whereEqualTo("localId", localId).whereEqualTo("uid", uid)
 

@@ -43,6 +43,9 @@ class CameraActivity() : AppCompatActivity() {
 
     companion object {
         var refreshCallback: (() -> Unit)? = null
+        fun registerRefreshCallback(callback: () -> Unit) {
+            refreshCallback = callback
+        }
     }
 
     override fun onDestroy() {
@@ -52,13 +55,6 @@ class CameraActivity() : AppCompatActivity() {
 
     var pinsDate = ""
     private lateinit var editDesc: EditText
-
-    private var refreshCallback: (() -> Unit)? = null
-
-    // Method to set the callback
-    fun setRefreshCallback(callback: () -> Unit) {
-        refreshCallback = callback
-    }
 
     // Example method to trigger the refresh
     fun triggerRefresh() {
@@ -74,8 +70,8 @@ class CameraActivity() : AppCompatActivity() {
     var lat: Double = 0.0
     var photoAdded = false
     var QR = ""
-    var uid = -1
-    var currUid = -1
+    var uid = ""
+    var currUid = ""
     var desc = ""
     var id = -1
 
@@ -146,6 +142,7 @@ class CameraActivity() : AppCompatActivity() {
         }
         //if this is a new pin instance...
         if(newInst){
+            editDesc.isEnabled = true;
             takeAPicture()
             //let the user take retake a picture
             fab.setOnClickListener {
@@ -153,14 +150,17 @@ class CameraActivity() : AppCompatActivity() {
             }
         }else{
             id = intent.getIntExtra("ID",-1)
-            currUid = intent.getIntExtra("CURR_UID",-1)
-            uid = intent.getIntExtra("UID",-1)
+            currUid = intent.getStringExtra("CURR_UID").toString()
+            uid = intent.getStringExtra("UID").toString()
             desc = intent.getStringExtra("DESC").toString()
             editDesc.setText(desc)
             //else just look at it
             if(uid == currUid){
                 //allow editing if it is the user's post
                 editDesc.isEnabled = true;
+                Log.d("TESSTUID", "UID: $uid, currUID: $currUid")
+            }else{
+                Log.d("TESSTUID", "UID: $uid, currUID: $currUid")
             }
             QR = intent.getStringExtra("QR").toString()
             currentPhotoPath = intent.getStringExtra("FILEPATH").toString()
@@ -235,8 +235,8 @@ class CameraActivity() : AppCompatActivity() {
                         Pin(id, currentPhotoPath, editDesc.text.toString(), pinsDate, lat, lon, QR, null, uid)
                     )
                 }
-                refreshCallback?.invoke()
             }
+            triggerRefresh()
             finish()
         }
     }
