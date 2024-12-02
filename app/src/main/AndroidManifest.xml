@@ -43,6 +43,10 @@
             android:name=".NewPinActivity.CameraActivity"
             android:exported="true">
         </activity>
+        <activity
+            android:name=".MapsActivity.InventoryActivity"
+            android:exported="true">
+        </activity>
 
         <provider
             android:authorities="edu.uark.ahnelson.OpenStreetMap2024.fileprovider"
