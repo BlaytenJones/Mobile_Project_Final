@@ -25,8 +25,8 @@ class BottomNavigationFragment : Fragment() {
         bottomNavigationView.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.nav_map -> navigateToActivity(MapsActivity::class.java)
-                R.id.nav_post-> navigateToActivity(CameraActivity::class.java)
                 R.id.nav_inventory -> navigateToActivity(InventoryActivity::class.java)
+                R.id.nav_settings-> navigateToActivity(SettingsActivity::class.java)
             }
             true
         }
