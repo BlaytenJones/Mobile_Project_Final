@@ -134,59 +134,67 @@ class SignInActivity : AppCompatActivity() {
     }
 
     private fun createUserWithUsernamePassword(){
-        val email = editUser.text.toString()
-        val password = editPass.text.toString()
-        auth.createUserWithEmailAndPassword(email, password)
-            .addOnCompleteListener(this) { task ->
-                if (task.isSuccessful) {
-                    // Sign in success, update UI with the signed-in user's information
-                    Log.d(TAG, "createUserWithEmail:success")
-                    val user = auth.currentUser
-                    //StartActivity
-                    //finish()
-                    Toast.makeText(this,"User signed in!",Toast.LENGTH_LONG).show()
-                    Log.d(TAG,"User UUID:${auth.currentUser.toString()}")
-                    auth.currentUser?.uid?.let { userViewModel.insertU(email, it) }
-                    val launchSecondActivityIntent = Intent(this,MapsActivity::class.java)
-                    launchSecondActivityIntent.putExtra("USER_ID", auth.currentUser?.uid)
-                    startActivity(launchSecondActivityIntent)
-                    finish()
-                } else {
-                    // If sign in fails, display a message to the user.
-                    Log.w(TAG, "createUserWithEmail:failure", task.exception)
-                    Toast.makeText(
-                        baseContext,
-                        "Authentication failed.",
-                        Toast.LENGTH_SHORT,
-                    ).show()
-                }
+        val email = editUser.text?.toString()
+        val password = editPass.text?.toString()
+        if (email != null) {
+            if (password != null) {
+                auth.createUserWithEmailAndPassword(email, password)
+                    .addOnCompleteListener(this) { task ->
+                        if (task.isSuccessful) {
+                            // Sign in success, update UI with the signed-in user's information
+                            Log.d(TAG, "createUserWithEmail:success")
+                            val user = auth.currentUser
+                            //StartActivity
+                            //finish()
+                            Toast.makeText(this,"User signed in!",Toast.LENGTH_LONG).show()
+                            Log.d(TAG,"User UUID:${auth.currentUser.toString()}")
+                            auth.currentUser?.uid?.let { userViewModel.insertU(email, it) }
+                            val launchSecondActivityIntent = Intent(this,MapsActivity::class.java)
+                            launchSecondActivityIntent.putExtra("USER_ID", auth.currentUser?.uid)
+                            startActivity(launchSecondActivityIntent)
+                            finish()
+                        } else {
+                            // If sign in fails, display a message to the user.
+                            Log.w(TAG, "createUserWithEmail:failure", task.exception)
+                            Toast.makeText(
+                                baseContext,
+                                "Authentication failed.",
+                                Toast.LENGTH_SHORT,
+                            ).show()
+                        }
+                    }
             }
+        }
     }
 
     private fun logInWithUsernamePassword(){
-        val email = editUser.text.toString()
-        val password = editPass.text.toString()
-        auth.signInWithEmailAndPassword(email, password)
-            .addOnCompleteListener(this) { task ->
-                if (task.isSuccessful) {
-                    // Sign in success, update UI with the signed-in user's information
-                    Log.d(TAG, "signInWithEmail:success")
-                    val user = auth.currentUser
-                    Toast.makeText(this,"User signed in!",Toast.LENGTH_LONG).show()
-                    Log.d(TAG,"User UUID:${auth.currentUser.toString()}")
-                    val launchSecondActivityIntent = Intent(this,MapsActivity::class.java)
-                    launchSecondActivityIntent.putExtra("USER_ID", auth.currentUser?.uid)
-                    startActivity(launchSecondActivityIntent)
-                    finish()
-                } else {
-                    // If sign in fails, display a message to the user.
-                    Log.w(TAG, "signInWithEmail:failure", task.exception)
-                    Toast.makeText(
-                        baseContext,
-                        "Authentication failed.",
-                        Toast.LENGTH_SHORT,
-                    ).show()
-                }
+        val email = editUser.text?.toString()
+        val password = editPass.text?.toString()
+        if (email != null) {
+            if (password != null) {
+                auth.signInWithEmailAndPassword(email, password)
+                    .addOnCompleteListener(this) { task ->
+                        if (task.isSuccessful) {
+                            // Sign in success, update UI with the signed-in user's information
+                            Log.d(TAG, "signInWithEmail:success")
+                            val user = auth.currentUser
+                            Toast.makeText(this,"User signed in!",Toast.LENGTH_LONG).show()
+                            Log.d(TAG,"User UUID:${auth.currentUser.toString()}")
+                            val launchSecondActivityIntent = Intent(this,MapsActivity::class.java)
+                            launchSecondActivityIntent.putExtra("USER_ID", auth.currentUser?.uid)
+                            startActivity(launchSecondActivityIntent)
+                            finish()
+                        } else {
+                            // If sign in fails, display a message to the user.
+                            Log.w(TAG, "signInWithEmail:failure", task.exception)
+                            Toast.makeText(
+                                baseContext,
+                                "Authentication failed.",
+                                Toast.LENGTH_SHORT,
+                            ).show()
+                        }
+                    }
             }
+        }
     }
 }
