@@ -5,6 +5,7 @@ import androidx.room.Insert
 import androidx.room.MapInfo
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Transaction
 import androidx.room.Update
 import kotlinx.coroutines.flow.Flow
 
@@ -18,7 +19,17 @@ interface JSONPlaceHolderDao {
     @Update
     suspend fun update(pin: Pin)
 
-    suspend fun addToken(user: User, mintedToken: MintedToken)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insertUser(user: User)
+
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insertToken(mintedToken: MintedToken)
+
+    @Transaction
+    suspend fun addToken(user: User, mintedToken: MintedToken) {
+        insertUser(user)
+        insertToken(mintedToken)
+    }
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insert(pin: Pin)

@@ -9,7 +9,7 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
-@Database(entities = [Pin::class, User::class], version = 1, exportSchema = false)
+@Database(entities = [Pin::class, User::class, MintedToken::class], version = 1, exportSchema = false)
 @TypeConverters(Converters::class) // Register the converters here
 abstract class JSONPlaceHolderDatabase : RoomDatabase() {
 
