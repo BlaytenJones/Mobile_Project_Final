@@ -120,6 +120,44 @@ class JSONPlaceholderRepository(private val jsonPlaceHolderDao: JSONPlaceHolderD
 
     @Suppress("RedundantSuspendModifier")
     @WorkerThread
+    suspend fun addTokenToUser(user:User, mintedToken:MintedToken){
+        val usersRef = db.collection("pins")
+
+        // Query for the pin based on localId and uid
+        Log.d("UPDATE", user.uid + " " + mintedToken.tokenId + " " + mintedToken.mintNum)
+        val query = usersRef
+            .whereEqualTo("uid", user.uid)
+
+        try {
+            query.get().addOnSuccessListener { documents ->
+                if (!documents.isEmpty) {
+                    for (document in documents) {
+                        // Update the document with the new pin details
+                        val docRef = usersRef.document(document.id)
+                        docRef.update(
+                            mapOf(
+                                "inventory" to user.inventory.plus(mintedToken),
+                            )
+                        ).addOnSuccessListener {
+                            Log.d("UPDATE", "User updated successfully!")
+                        }.addOnFailureListener { e ->
+                            Log.e("UPDATE", "Error updating user: $e")
+                        }
+                    }
+                } else {
+                    Log.d("UPDATE", "No user found with matching uid.")
+                }
+            }.addOnFailureListener { e ->
+                Log.e("UPDATE", "Error fetching documents: $e")
+            }
+        } catch (e: Exception) {
+            Log.e("UPDATE", "Exception occurred: $e")
+        }
+    }
+
+
+    @Suppress("RedundantSuspendModifier")
+    @WorkerThread
     suspend fun deletePinFromRemoteDatasource(localId:Int, uid: String){
         val usersRef = db.collection("pins")
         val query = usersRef.whereEqualTo("localId", localId).whereEqualTo("uid", uid)

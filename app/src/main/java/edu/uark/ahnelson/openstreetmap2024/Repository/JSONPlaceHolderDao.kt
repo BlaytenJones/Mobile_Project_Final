@@ -18,6 +18,8 @@ interface JSONPlaceHolderDao {
     @Update
     suspend fun update(pin: Pin)
 
+    suspend fun addToken(user: User, mintedToken: MintedToken)
+
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insert(pin: Pin)
 
