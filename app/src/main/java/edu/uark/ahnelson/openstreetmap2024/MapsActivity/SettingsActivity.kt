@@ -3,6 +3,7 @@ package edu.uark.ahnelson.openstreetmap2024.MapsActivity
 import android.content.Intent
 import android.os.Bundle
 import android.widget.ImageButton
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -21,6 +22,11 @@ class SettingsActivity : AppCompatActivity() {
 
         auth = Firebase.auth
 
+        val user = auth.currentUser
+        val userEmail = user?.email ?: "No email found"
+        val emailTextView: TextView = findViewById(R.id.email)
+        emailTextView.text = userEmail
+
         findViewById<ImageButton>(R.id.logoutButton).setOnClickListener {
             auth.signOut() // Sign out from Firebase
             Toast.makeText(this, "Signed out successfully!", Toast.LENGTH_SHORT).show()
@@ -32,5 +38,4 @@ class SettingsActivity : AppCompatActivity() {
             finish()
         }
     }
-
 }
