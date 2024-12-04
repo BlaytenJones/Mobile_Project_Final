@@ -30,7 +30,7 @@
             android:layout_marginStart="300dp"
             android:shape="oval"
             android:src="@android:drawable/ic_menu_camera"
-            android:translationY="670dp"
+            android:translationY="50dp"
             app:layout_constraintBottom_toTopOf="@+id/map"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

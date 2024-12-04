@@ -136,6 +136,9 @@ class CameraActivity() : AppCompatActivity() {
         newInst = intent.getBooleanExtra("NEW",false)
         lat = intent.getDoubleExtra("LAT", 0.0)
         lon = intent.getDoubleExtra("LON",0.0)
+        id = intent.getIntExtra("ID",-1)
+        currUid = intent.getStringExtra("CURR_UID").toString()
+        uid = intent.getStringExtra("UID").toString()
         editDesc = findViewById(R.id.edit_desc)
         findViewById<FloatingActionButton>(R.id.submit).setOnClickListener {
             savePicture()
@@ -149,9 +152,6 @@ class CameraActivity() : AppCompatActivity() {
                 takeAPicture()
             }
         }else{
-            id = intent.getIntExtra("ID",-1)
-            currUid = intent.getStringExtra("CURR_UID").toString()
-            uid = intent.getStringExtra("UID").toString()
             desc = intent.getStringExtra("DESC").toString()
             editDesc.setText(desc)
             //else just look at it
@@ -165,6 +165,7 @@ class CameraActivity() : AppCompatActivity() {
             QR = intent.getStringExtra("QR").toString()
             currentPhotoPath = intent.getStringExtra("FILEPATH").toString()
             setPic()
+            fab.visibility = View.GONE
             timestamp.text = intent.getStringExtra("DATE").toString()
         }
     }

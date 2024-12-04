@@ -12,4 +12,5 @@
     <string name="post">Post</string>
     <string name="inventory">Inventory</string>
     <string name="settings">settings</string>
+    <string name="token_image">token_image</string>
 </resources>

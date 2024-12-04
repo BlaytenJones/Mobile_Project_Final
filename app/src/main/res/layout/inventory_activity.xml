@@ -6,6 +6,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".MapsActivity.InventoryActivity">
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerViewInventory"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="8dp"
+        android:clipToPadding="false"
+        android:padding="8dp"
+        tools:listitem="@layout/item_inventory_token" />
+
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/bottom_navigation_fragment"
         android:name="edu.uark.ahnelson.openstreetmap2024.MapsActivity.BottomNavigationFragment"
