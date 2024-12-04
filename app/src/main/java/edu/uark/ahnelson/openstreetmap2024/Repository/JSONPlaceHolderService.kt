@@ -1,5 +1,7 @@
 package edu.uark.ahnelson.openstreetmap2024.Repository
 
+import edu.uark.ahnelson.openstreetmap2024.data.entity.Pin
+import edu.uark.ahnelson.openstreetmap2024.data.entity.User
 import retrofit2.Call
 import retrofit2.Response
 import retrofit2.http.Body
@@ -31,7 +33,7 @@ interface JSONPlaceHolderService {
     fun insertPin(@Body pin: Pin): Call<Pin>
 
     @PUT("pins")
-    fun updatePin(@Body pin:Pin): Call<Pin>
+    fun updatePin(@Body pin: Pin): Call<Pin>
 
     @DELETE("pins")
     fun deletePin(@Path("id")id:Int): Call<Void>

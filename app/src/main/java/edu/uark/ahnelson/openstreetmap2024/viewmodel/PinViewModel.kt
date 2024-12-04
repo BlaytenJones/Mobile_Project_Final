@@ -1,4 +1,4 @@
-package edu.uark.ahnelson.openstreetmap2024.MapsActivity
+package edu.uark.ahnelson.openstreetmap2024.viewmodel
 
 import android.util.Log
 import androidx.lifecycle.LiveData
@@ -8,12 +8,10 @@ import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.Firebase
 import com.google.firebase.firestore.firestore
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
-import edu.uark.ahnelson.openstreetmap2024.Repository.Pin
+import edu.uark.ahnelson.openstreetmap2024.data.entity.Pin
 import edu.uark.ahnelson.openstreetmap2024.Repository.JSONPlaceholderRepository
-import edu.uark.ahnelson.openstreetmap2024.Repository.MintedToken
-import edu.uark.ahnelson.openstreetmap2024.Repository.User
+import edu.uark.ahnelson.openstreetmap2024.data.entity.MintedToken
+import edu.uark.ahnelson.openstreetmap2024.data.entity.User
 import kotlinx.coroutines.launch
 
 class PinViewModel(private val repository: JSONPlaceholderRepository) : ViewModel() {

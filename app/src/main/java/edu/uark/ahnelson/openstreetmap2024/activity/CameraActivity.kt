@@ -1,11 +1,10 @@
-package edu.uark.ahnelson.openstreetmap2024.NewPinActivity
+package edu.uark.ahnelson.openstreetmap2024.activity
 
 import android.app.Activity
 import android.content.ContentValues
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.icu.text.DateFormat
 import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
@@ -13,7 +12,6 @@ import android.provider.MediaStore
 import android.util.Log
 import android.view.View
 import android.widget.EditText
-import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
@@ -24,17 +22,14 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.FileProvider
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.room.ColumnInfo
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import edu.uark.ahnelson.openstreetmap2024.MapsActivity.PinViewModel
-import edu.uark.ahnelson.openstreetmap2024.MapsActivity.PinViewModelFactory
-import edu.uark.ahnelson.openstreetmap2024.PinsApplication
+import edu.uark.ahnelson.openstreetmap2024.viewmodel.NewPinViewModel
+import edu.uark.ahnelson.openstreetmap2024.viewmodel.NewPinViewModelFactory
 import java.io.File
 import edu.uark.ahnelson.openstreetmap2024.R
-import edu.uark.ahnelson.openstreetmap2024.Repository.Pin
+import edu.uark.ahnelson.openstreetmap2024.data.entity.Pin
 import java.io.OutputStream
 import java.text.SimpleDateFormat
-import java.util.Calendar
 import java.util.Date
 import java.util.Locale
 import kotlin.math.roundToInt

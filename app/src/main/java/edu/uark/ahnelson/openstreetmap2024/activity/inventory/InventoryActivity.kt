@@ -1,9 +1,7 @@
-package edu.uark.ahnelson.openstreetmap2024.MapsActivity
+package edu.uark.ahnelson.openstreetmap2024.activity.inventory
 
-import InventoryAdapter
 import android.graphics.drawable.AnimationDrawable
 import android.os.Bundle
-import android.util.Log
 import android.widget.Button
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
@@ -14,9 +12,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
-import edu.uark.ahnelson.openstreetmap2024.PinsApplication
+import edu.uark.ahnelson.openstreetmap2024.activity.PinsApplication
 import edu.uark.ahnelson.openstreetmap2024.R
-import edu.uark.ahnelson.openstreetmap2024.Repository.MintedToken
+import edu.uark.ahnelson.openstreetmap2024.data.entity.MintedToken
+import edu.uark.ahnelson.openstreetmap2024.viewmodel.PinViewModel
+import edu.uark.ahnelson.openstreetmap2024.viewmodel.PinViewModelFactory
 
 class InventoryActivity : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth

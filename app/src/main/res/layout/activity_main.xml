@@ -6,11 +6,11 @@
     android:background="@drawable/gradient_list"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MapsActivity.MapsActivity">
+    tools:context=".activity.main.MapsActivity">
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/fragmentContainerView"
-        android:name="edu.uark.ahnelson.openstreetmap2024.MapsActivity.OpenStreetMapFragment"
+        android:name="edu.uark.ahnelson.openstreetmap2024.activity.map.OpenStreetMapFragment"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintTop_toTopOf="parent"
@@ -20,7 +20,7 @@
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/bottom_navigation_fragment"
-        android:name="edu.uark.ahnelson.openstreetmap2024.MapsActivity.BottomNavigationFragment"
+        android:name="edu.uark.ahnelson.openstreetmap2024.activity.BottomNavigationFragment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"

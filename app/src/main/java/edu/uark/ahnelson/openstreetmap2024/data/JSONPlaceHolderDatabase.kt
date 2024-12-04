@@ -1,4 +1,4 @@
-package edu.uark.ahnelson.openstreetmap2024.Repository
+package edu.uark.ahnelson.openstreetmap2024.data
 
 import android.content.Context
 import androidx.room.Database
@@ -6,6 +6,10 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import androidx.sqlite.db.SupportSQLiteDatabase
+import edu.uark.ahnelson.openstreetmap2024.Repository.Converters
+import edu.uark.ahnelson.openstreetmap2024.data.entity.MintedToken
+import edu.uark.ahnelson.openstreetmap2024.data.entity.Pin
+import edu.uark.ahnelson.openstreetmap2024.data.entity.User
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 

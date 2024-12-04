@@ -1,4 +1,5 @@
-import android.graphics.BitmapFactory
+package edu.uark.ahnelson.openstreetmap2024.activity.inventory
+
 import android.graphics.drawable.BitmapDrawable
 import android.util.Log
 import android.view.LayoutInflater
@@ -9,9 +10,7 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import edu.uark.ahnelson.openstreetmap2024.R
-import edu.uark.ahnelson.openstreetmap2024.Repository.MintedToken
-import kotlin.math.max
-import kotlin.math.min
+import edu.uark.ahnelson.openstreetmap2024.data.entity.MintedToken
 
 class InventoryAdapter(private val tokens: List<MintedToken>) :
     RecyclerView.Adapter<InventoryAdapter.TokenViewHolder>() {

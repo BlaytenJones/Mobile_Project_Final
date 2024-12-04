@@ -1,8 +1,7 @@
-package edu.uark.ahnelson.openstreetmap2024.MapsActivity
+package edu.uark.ahnelson.openstreetmap2024.activity.main
 
 import android.Manifest
 import android.content.Context
-import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.drawable.AnimationDrawable
 import android.location.Location
@@ -20,13 +19,15 @@ import androidx.core.view.WindowInsetsCompat
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationServices
-import edu.uark.ahnelson.openstreetmap2024.NewPinActivity.CameraActivity
-import edu.uark.ahnelson.openstreetmap2024.PinsApplication
+import edu.uark.ahnelson.openstreetmap2024.activity.map.OpenStreetMapFragment
+import edu.uark.ahnelson.openstreetmap2024.activity.PinsApplication
 import edu.uark.ahnelson.openstreetmap2024.R
 import edu.uark.ahnelson.openstreetmap2024.Util.LocationUtilCallback
 import edu.uark.ahnelson.openstreetmap2024.Util.createLocationCallback
 import edu.uark.ahnelson.openstreetmap2024.Util.createLocationRequest
 import edu.uark.ahnelson.openstreetmap2024.Util.replaceFragmentInActivity
+import edu.uark.ahnelson.openstreetmap2024.viewmodel.PinViewModel
+import edu.uark.ahnelson.openstreetmap2024.viewmodel.PinViewModelFactory
 import org.osmdroid.config.Configuration
 import org.osmdroid.util.GeoPoint
 

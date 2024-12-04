@@ -1,7 +1,5 @@
-package edu.uark.ahnelson.openstreetmap2024.MapsActivity
+package edu.uark.ahnelson.openstreetmap2024.activity.auth
 
-import android.content.ActivityNotFoundException
-import android.content.Context
 import android.content.Intent
 import android.graphics.drawable.AnimationDrawable
 import android.os.Bundle
@@ -11,26 +9,23 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.ActivityResult
-import androidx.activity.result.IntentSenderRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import com.google.android.gms.auth.api.identity.BeginSignInRequest
-import com.google.android.gms.auth.api.identity.Identity
 import com.google.android.gms.auth.api.identity.SignInClient
-import com.google.android.gms.auth.api.identity.SignInCredential
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.common.api.CommonStatusCodes
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
+import edu.uark.ahnelson.openstreetmap2024.activity.main.MapsActivity
 import edu.uark.ahnelson.openstreetmap2024.R
-import edu.uark.ahnelson.openstreetmap2024.Repository.User
-import edu.uark.ahnelson.openstreetmap2024.PinsApplication
+import edu.uark.ahnelson.openstreetmap2024.activity.PinsApplication
+import edu.uark.ahnelson.openstreetmap2024.viewmodel.PinViewModel
+import edu.uark.ahnelson.openstreetmap2024.viewmodel.PinViewModelFactory
 
 class SignInActivity : AppCompatActivity() {
     private val TAG = "SIGNIN"
@@ -126,7 +121,7 @@ class SignInActivity : AppCompatActivity() {
         if (currentUser != null) {
             Toast.makeText(this, "User signed in!", Toast.LENGTH_LONG).show()
             Log.d(TAG, "User UUID:${auth.currentUser?.uid}")
-            val launchSecondActivityIntent = Intent(this,MapsActivity::class.java)
+            val launchSecondActivityIntent = Intent(this, MapsActivity::class.java)
             launchSecondActivityIntent.putExtra("USER_ID", auth.currentUser?.uid)
             startActivity(launchSecondActivityIntent)
             finish()
@@ -149,7 +144,7 @@ class SignInActivity : AppCompatActivity() {
                             Toast.makeText(this,"User signed in!",Toast.LENGTH_LONG).show()
                             Log.d(TAG,"User UUID:${auth.currentUser.toString()}")
                             auth.currentUser?.uid?.let { userViewModel.insertU(email, it) }
-                            val launchSecondActivityIntent = Intent(this,MapsActivity::class.java)
+                            val launchSecondActivityIntent = Intent(this, MapsActivity::class.java)
                             launchSecondActivityIntent.putExtra("USER_ID", auth.currentUser?.uid)
                             startActivity(launchSecondActivityIntent)
                             finish()
@@ -180,7 +175,7 @@ class SignInActivity : AppCompatActivity() {
                             val user = auth.currentUser
                             Toast.makeText(this,"User signed in!",Toast.LENGTH_LONG).show()
                             Log.d(TAG,"User UUID:${auth.currentUser.toString()}")
-                            val launchSecondActivityIntent = Intent(this,MapsActivity::class.java)
+                            val launchSecondActivityIntent = Intent(this, MapsActivity::class.java)
                             launchSecondActivityIntent.putExtra("USER_ID", auth.currentUser?.uid)
                             startActivity(launchSecondActivityIntent)
                             finish()

@@ -3,6 +3,7 @@ package edu.uark.ahnelson.openstreetmap2024.Repository
 import androidx.room.TypeConverter
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import edu.uark.ahnelson.openstreetmap2024.data.entity.MintedToken
 
 class Converters {
     private val gson = Gson()

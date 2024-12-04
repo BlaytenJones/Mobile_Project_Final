@@ -6,7 +6,7 @@
     android:id="@+id/mainLayout"
     android:background="@drawable/gradient_list"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".MapsActivity.InventoryActivity">
+    tools:context=".activity.inventory.InventoryActivity">
 
     <Button
         android:id="@+id/button"
@@ -37,7 +37,7 @@
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/bottom_navigation_fragment"
-        android:name="edu.uark.ahnelson.openstreetmap2024.MapsActivity.BottomNavigationFragment"
+        android:name="edu.uark.ahnelson.openstreetmap2024.activity.BottomNavigationFragment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
