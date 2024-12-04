@@ -1,4 +1,4 @@
-package edu.uark.ahnelson.openstreetmap2024.MapsActivity
+package edu.uark.ahnelson.openstreetmap2024.viewmodel
 
 import android.util.Log
 import androidx.lifecycle.LiveData
@@ -8,7 +8,7 @@ import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.Firebase
 import com.google.firebase.firestore.firestore
-import edu.uark.ahnelson.openstreetmap2024.Repository.Pin
+import edu.uark.ahnelson.openstreetmap2024.data.entity.Pin
 import edu.uark.ahnelson.openstreetmap2024.Repository.JSONPlaceholderRepository
 import kotlinx.coroutines.launch
 

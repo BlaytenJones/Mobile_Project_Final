@@ -4,11 +4,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".MapsActivity.SettingsActivity">
+    tools:context=".activity.settings.SettingsActivity">
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/bottom_navigation_fragment"
-        android:name="edu.uark.ahnelson.openstreetmap2024.MapsActivity.BottomNavigationFragment"
+        android:name="edu.uark.ahnelson.openstreetmap2024.activity.BottomNavigationFragment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"

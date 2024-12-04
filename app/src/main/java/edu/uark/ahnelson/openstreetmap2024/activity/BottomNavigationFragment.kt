@@ -1,4 +1,4 @@
-package edu.uark.ahnelson.openstreetmap2024.MapsActivity
+package edu.uark.ahnelson.openstreetmap2024.activity
 
 import android.content.Intent
 import android.os.Bundle
@@ -8,9 +8,10 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import edu.uark.ahnelson.openstreetmap2024.NewPinActivity.CameraActivity
 import edu.uark.ahnelson.openstreetmap2024.R
-import org.osmdroid.views.overlay.*
+import edu.uark.ahnelson.openstreetmap2024.activity.inventory.InventoryActivity
+import edu.uark.ahnelson.openstreetmap2024.activity.main.MapsActivity
+import edu.uark.ahnelson.openstreetmap2024.activity.settings.SettingsActivity
 
 class BottomNavigationFragment : Fragment() {
 

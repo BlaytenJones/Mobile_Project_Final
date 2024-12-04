@@ -4,11 +4,11 @@ import android.util.Log
 import androidx.annotation.WorkerThread
 import com.google.firebase.Firebase
 import com.google.firebase.firestore.firestore
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.Flow
-import androidx.activity.viewModels
-import kotlinx.coroutines.launch
+import edu.uark.ahnelson.openstreetmap2024.data.JSONPlaceHolderDao
+import edu.uark.ahnelson.openstreetmap2024.data.entity.MintedToken
+import edu.uark.ahnelson.openstreetmap2024.data.entity.Pin
+import edu.uark.ahnelson.openstreetmap2024.data.entity.User
 
 class JSONPlaceholderRepository(private val jsonPlaceHolderDao: JSONPlaceHolderDao) {
 
@@ -17,7 +17,7 @@ class JSONPlaceholderRepository(private val jsonPlaceHolderDao: JSONPlaceHolderD
 
     @Suppress("RedundantSuspendModifier")
     @WorkerThread
-    suspend fun updatePinInRoomDatabase(pin:Pin){
+    suspend fun updatePinInRoomDatabase(pin: Pin){
         jsonPlaceHolderDao.update(pin)
     }
 
@@ -29,7 +29,7 @@ class JSONPlaceholderRepository(private val jsonPlaceHolderDao: JSONPlaceHolderD
 
     @Suppress("RedundantSuspendModifier")
     @WorkerThread
-    suspend fun insertPinIntoRemoteDatasource(pin:Pin){
+    suspend fun insertPinIntoRemoteDatasource(pin: Pin){
         db.collection("pins")
             .add(pin)
             .addOnSuccessListener { documentReference ->
@@ -76,7 +76,7 @@ class JSONPlaceholderRepository(private val jsonPlaceHolderDao: JSONPlaceHolderD
 
     @Suppress("RedundantSuspendModifier")
     @WorkerThread
-    suspend fun updatePinInRemoteDatasource(pin:Pin){
+    suspend fun updatePinInRemoteDatasource(pin: Pin){
         val usersRef = db.collection("pins")
 
         // Query for the pin based on localId and uid
@@ -120,7 +120,7 @@ class JSONPlaceholderRepository(private val jsonPlaceHolderDao: JSONPlaceHolderD
 
     @Suppress("RedundantSuspendModifier")
     @WorkerThread
-    suspend fun addTokenToUser(user:User, mintedToken:MintedToken){
+    suspend fun addTokenToUser(user: User, mintedToken: MintedToken){
         val usersRef = db.collection("pins")
 
         // Query for the pin based on localId and uid
