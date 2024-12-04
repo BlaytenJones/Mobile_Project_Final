@@ -1,12 +1,14 @@
 package edu.uark.ahnelson.openstreetmap2024.MapsActivity
 
 import InventoryAdapter
+import android.graphics.drawable.AnimationDrawable
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
@@ -27,6 +29,13 @@ class InventoryActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.inventory_activity)
+
+        val constraintLayout = findViewById<ConstraintLayout>(R.id.mainLayout)
+
+        val animationDrawable = constraintLayout.background as AnimationDrawable
+        animationDrawable.setEnterFadeDuration(1500)
+        animationDrawable.setExitFadeDuration(3000)
+        animationDrawable.start()
 
         val recyclerView = findViewById<RecyclerView>(R.id.recyclerViewInventory)
         recyclerView.layoutManager = GridLayoutManager(this, 3) // 3 tokens per row
