@@ -17,5 +17,4 @@ data class Pin(
     @Expose @SerializedName("QRCode") @ColumnInfo(name = "QRCode") val QRCode: String = "", // default value
     @Expose @SerializedName("id") @ColumnInfo(name = "id") val id: Int? = null, // nullable and default
     @Expose @SerializedName("uid") @ColumnInfo(name = "uid") val uid: String = "" // default value
-) {
-}
+)

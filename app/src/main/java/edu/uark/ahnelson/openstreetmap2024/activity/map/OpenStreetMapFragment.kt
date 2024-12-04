@@ -110,7 +110,7 @@ class OpenStreetMapFragment : Fragment(), Marker.OnMarkerClickListener {
 
     private fun addLocationOverlay() {
         mLocationOverlay = MyLocationNewOverlay(GpsMyLocationProvider(context), mMap)
-        this.mLocationOverlay.enableMyLocation();
+        this.mLocationOverlay.enableMyLocation()
         mMap.overlays.add(mLocationOverlay)
     }
 
@@ -125,7 +125,7 @@ class OpenStreetMapFragment : Fragment(), Marker.OnMarkerClickListener {
             mMap.tileProvider.tileSource.copyrightNotice
         val copyrightOverlay = CopyrightOverlay(context)
         copyrightOverlay.setCopyrightNotice(copyrightNotice)
-        mMap.getOverlays().add(copyrightOverlay)
+        mMap.overlays.add(copyrightOverlay)
 
     }
 
@@ -140,7 +140,7 @@ class OpenStreetMapFragment : Fragment(), Marker.OnMarkerClickListener {
     fun changeCenterLocation(geoPoint: GeoPoint) {
         curLocation = geoPoint
         val mapController = mMap.controller
-        mapController.setCenter(curLocation);
+        mapController.setCenter(curLocation)
 
 
     }
@@ -154,7 +154,7 @@ class OpenStreetMapFragment : Fragment(), Marker.OnMarkerClickListener {
         startMarker.id = id.toString()
         startMarker.relatedObject = pin
         startMarker.icon = ResourcesCompat.getDrawable(resources, R.drawable.map_pin_small, null)
-        mMap.getOverlays().add(startMarker)
+        mMap.overlays.add(startMarker)
     }
 
     fun clearMarkers() {
@@ -162,7 +162,7 @@ class OpenStreetMapFragment : Fragment(), Marker.OnMarkerClickListener {
         setupMapOptions()
     }
 
-    fun clearOneMarker(id: Int) {
+    /*fun clearOneMarker(id: Int) {
         for (overlay in mMap.overlays) {
             if (overlay is Marker) {
                 if (overlay.id == id.toString()) {
@@ -170,7 +170,7 @@ class OpenStreetMapFragment : Fragment(), Marker.OnMarkerClickListener {
                 }
             }
         }
-    }
+    }*/
 
     override fun onMarkerClick(marker: Marker?, mapView: MapView?): Boolean {
         marker?.id?.let { Log.d("OpenStreetMapFragment", it) }

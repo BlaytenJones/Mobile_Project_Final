@@ -1,4 +1,4 @@
-package edu.uark.ahnelson.openstreetmap2024.Util
+package edu.uark.ahnelson.openstreetmap2024.util
 
 
 import android.Manifest
@@ -46,40 +46,6 @@ fun createLocationCallback(callback: LocationUtilCallback): LocationCallback {
 }
 
 /**
- * gets the last known location from the [locationProviderClient]
- * First checks for permission from the passed [context]
- * If permission fails, fail through the [LocationUtilCallback].[requestPermissionCallback]
- * If permission succeeds, then add a successListener to lastLocation
- * that sends location out through [LocationUtilCallback].[locationUpdatedCallback]
- */
-fun getLastLocation(context: Context, locationProviderClient: FusedLocationProviderClient, callback: LocationUtilCallback){
-    //Check for permissions
-    if (ActivityCompat.checkSelfPermission(
-            context,
-            Manifest.permission.ACCESS_FINE_LOCATION
-        ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
-            context,
-            Manifest.permission.ACCESS_COARSE_LOCATION
-        ) != PackageManager.PERMISSION_GRANTED
-    ) {
-        //If permissions not granted, go ask for them
-        callback.requestPermissionCallback()
-        return
-    }
-    //Try to get last location
-    locationProviderClient.lastLocation.addOnSuccessListener{
-        if (it != null){
-            //Send it back through the callback
-            callback.locationUpdatedCallback(it)
-            Log.d("LocationUtil","Last Known Location is [Lat: ${it.latitude}, Long: ${it.longitude}]")
-        }
-    }.addOnCanceledListener {
-        //Whoops
-        Log.d("LocationUtil","lastLocationCancelled")
-    }
-}
-
-/**
  * creates a recurring locationRequest
  * first check for permissions
  * then request updates
@@ -106,6 +72,3 @@ fun createLocationRequest(context: Context, locationProviderClient: FusedLocatio
     return true
 }
 
-fun stopLocationUpdates(locationProviderClient: FusedLocationProviderClient, locationCallback: LocationCallback){
-    locationProviderClient.removeLocationUpdates(locationCallback)
-}

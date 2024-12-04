@@ -4,7 +4,6 @@ import android.util.Log
 import androidx.annotation.WorkerThread
 import com.google.firebase.Firebase
 import com.google.firebase.firestore.firestore
-import kotlinx.coroutines.flow.Flow
 import com.google.firebase.firestore.FieldValue
 import edu.uark.ahnelson.openstreetmap2024.data.JSONPlaceHolderDao
 import edu.uark.ahnelson.openstreetmap2024.data.entity.MintedToken
@@ -12,22 +11,22 @@ import edu.uark.ahnelson.openstreetmap2024.data.entity.Pin
 import edu.uark.ahnelson.openstreetmap2024.data.entity.User
 import kotlinx.coroutines.tasks.await
 
+// Used to interact with remote database, need to rename and remove unused functions
+
 class JSONPlaceholderRepository(private val jsonPlaceHolderDao: JSONPlaceHolderDao) {
 
-    val allPins: Flow<Map<Int, Pin>> = jsonPlaceHolderDao.getOrderedPins()
+    //val allPins: Flow<Map<Int, Pin>> = jsonPlaceHolderDao.getOrderedPins()
     val db = Firebase.firestore
 
-    @Suppress("RedundantSuspendModifier")
-    @WorkerThread
+    /*@WorkerThread
     suspend fun updatePinInRoomDatabase(pin: Pin){
         jsonPlaceHolderDao.update(pin)
-    }
+    }*/
 
-    @Suppress("RedundantSuspendModifier")
-    @WorkerThread
+    /*@WorkerThread
     suspend fun deletePinFromRoomDatabase(localId:Int){
         jsonPlaceHolderDao.delete(localId)
-    }
+    }*/
 
     @Suppress("RedundantSuspendModifier")
     @WorkerThread
@@ -42,7 +41,7 @@ class JSONPlaceholderRepository(private val jsonPlaceHolderDao: JSONPlaceHolderD
             }
     }
 
-    @Suppress("RedundantSuspendModifier")
+    /*@Suppress("RedundantSuspendModifier")
     @WorkerThread
     suspend fun getUserFromWebserviceById(email: String) {
         db.collection("users")
@@ -61,7 +60,7 @@ class JSONPlaceholderRepository(private val jsonPlaceHolderDao: JSONPlaceHolderD
             .addOnFailureListener { exception ->
                 Log.e("FirebaseGet", "Error retrieving user by email", exception)
             }
-    }
+    }*/
 
     @Suppress("RedundantSuspendModifier")
     @WorkerThread
@@ -120,7 +119,6 @@ class JSONPlaceholderRepository(private val jsonPlaceHolderDao: JSONPlaceHolderD
         }
     }
 
-    @Suppress("RedundantSuspendModifier")
     @WorkerThread
     suspend fun addTokenToUser(user: User, mintedToken: MintedToken) {
         val usersRef = db.collection("users")
@@ -160,7 +158,7 @@ class JSONPlaceholderRepository(private val jsonPlaceHolderDao: JSONPlaceHolderD
     }
 
 
-    @Suppress("RedundantSuspendModifier")
+    /*@Suppress("RedundantSuspendModifier")
     @WorkerThread
     suspend fun deletePinFromRemoteDatasource(localId:Int, uid: String){
         val usersRef = db.collection("pins")
@@ -188,5 +186,5 @@ class JSONPlaceholderRepository(private val jsonPlaceHolderDao: JSONPlaceHolderD
             .addOnFailureListener { exception ->
                 Log.d("DELETE", "Error getting document: ${exception.message}")
             }
-    }
+    }*/
 }

@@ -21,7 +21,7 @@ abstract class JSONPlaceHolderDatabase : RoomDatabase() {
 
     private class JSONPlaceHolderDatabaseCallback(
         private val scope: CoroutineScope
-    ) : RoomDatabase.Callback() {
+    ) : Callback() {
 
         override fun onCreate(db: SupportSQLiteDatabase) {
             super.onCreate(db)

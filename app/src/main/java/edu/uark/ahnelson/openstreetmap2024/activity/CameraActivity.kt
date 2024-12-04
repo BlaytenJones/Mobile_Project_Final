@@ -56,7 +56,6 @@ class CameraActivity() : AppCompatActivity() {
         refreshCallback?.invoke()
     }
 
-    private lateinit var pin: Pin
     val newPinViewModel: NewPinViewModel by viewModels {
         NewPinViewModelFactory((application as PinsApplication).repository)
     }
@@ -90,8 +89,8 @@ class CameraActivity() : AppCompatActivity() {
 
     private fun galleryAddPic(filename:String){
         //Make sure to call this function on a worker thread, else it will block main thread
-        var fos: OutputStream? = null
-        var imageUri: Uri? = null
+        var fos: OutputStream?
+        var imageUri: Uri?
         val contentValues = ContentValues().apply {
             put(MediaStore.MediaColumns.DISPLAY_NAME, filename)
             put(MediaStore.MediaColumns.MIME_TYPE, "image/jpg")
@@ -140,7 +139,7 @@ class CameraActivity() : AppCompatActivity() {
         }
         //if this is a new pin instance...
         if(newInst){
-            editDesc.isEnabled = true;
+            editDesc.isEnabled = true
             takeAPicture()
             //let the user take retake a picture
             fab.setOnClickListener {
@@ -152,7 +151,7 @@ class CameraActivity() : AppCompatActivity() {
             //else just look at it
             if(uid == currUid){
                 //allow editing if it is the user's post
-                editDesc.isEnabled = true;
+                editDesc.isEnabled = true
                 Log.d("TESSTUID", "UID: $uid, currUID: $currUid")
             }else{
                 Log.d("TESSTUID", "UID: $uid, currUID: $currUid")
@@ -186,7 +185,7 @@ class CameraActivity() : AppCompatActivity() {
         val pictureIntent: Intent = Intent().setAction(MediaStore.ACTION_IMAGE_CAPTURE)
         if(pictureIntent.resolveActivity(packageManager)!=null){
             val filepath = createFilePath()
-            val myFile: File = File(filepath)
+            val myFile = File(filepath)
             currentPhotoPath = filepath
             val photoUri = FileProvider.getUriForFile(this,"edu.uark.ahnelson.OpenStreetMap2024.fileprovider",myFile)
             pictureIntent.putExtra(MediaStore.EXTRA_OUTPUT,photoUri)
@@ -196,7 +195,7 @@ class CameraActivity() : AppCompatActivity() {
 
     private fun setPic() {
         photoAdded = true
-        val targetW: Double = imageView.getWidth()/1.2
+        val targetW: Double = imageView.width /1.2
 
         // Get the dimensions of the bitmap
         val bmOptions = BitmapFactory.Options()

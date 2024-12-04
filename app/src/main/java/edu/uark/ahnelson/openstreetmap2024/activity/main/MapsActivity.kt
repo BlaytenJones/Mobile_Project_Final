@@ -22,10 +22,10 @@ import com.google.android.gms.location.LocationServices
 import edu.uark.ahnelson.openstreetmap2024.activity.map.OpenStreetMapFragment
 import edu.uark.ahnelson.openstreetmap2024.activity.PinsApplication
 import edu.uark.ahnelson.openstreetmap2024.R
-import edu.uark.ahnelson.openstreetmap2024.Util.LocationUtilCallback
-import edu.uark.ahnelson.openstreetmap2024.Util.createLocationCallback
-import edu.uark.ahnelson.openstreetmap2024.Util.createLocationRequest
-import edu.uark.ahnelson.openstreetmap2024.Util.replaceFragmentInActivity
+import edu.uark.ahnelson.openstreetmap2024.util.LocationUtilCallback
+import edu.uark.ahnelson.openstreetmap2024.util.createLocationCallback
+import edu.uark.ahnelson.openstreetmap2024.util.createLocationRequest
+import edu.uark.ahnelson.openstreetmap2024.util.replaceFragmentInActivity
 import edu.uark.ahnelson.openstreetmap2024.viewmodel.PinViewModel
 import edu.uark.ahnelson.openstreetmap2024.viewmodel.PinViewModelFactory
 import org.osmdroid.config.Configuration

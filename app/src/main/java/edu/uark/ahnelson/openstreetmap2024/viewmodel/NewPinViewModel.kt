@@ -10,23 +10,22 @@ import edu.uark.ahnelson.openstreetmap2024.Repository.JSONPlaceholderRepository
 import kotlinx.coroutines.launch
 
 class NewPinViewModel(private val repository: JSONPlaceholderRepository) : ViewModel() {
-    /**
-     * Launching a new coroutine to insert the data in a non-blocking way
-     */
+
+    //Launching a new coroutine to insert the data in a non-blocking way
     val _pin = MutableLiveData<Pin>().apply{value=null}
-    val _pinTemp = MutableLiveData<Pin>().apply{value=null}
+    //val _pinTemp = MutableLiveData<Pin>().apply{value=null}
     val pin: LiveData<Pin>
         get() = _pin
-    val pinTemp: LiveData<Pin>
-        get() = _pin
+    //val pinTemp: LiveData<Pin>
+        //get() = _pin
 
-    fun start(pinId:Int){
+    /*fun start(pinId:Int){
         viewModelScope.launch {
             repository.allPins.collect{
                 _pin.value = it[pinId]
             }
         }
-    }
+    }*/
 
     fun insert(pin: Pin) = viewModelScope.launch {
         repository.insertPinIntoRemoteDatasource(pin)
@@ -36,13 +35,13 @@ class NewPinViewModel(private val repository: JSONPlaceholderRepository) : ViewM
         repository.updatePinInRemoteDatasource(pin)
     }
 
-    fun getTempId(pinId: Int){
+    /*fun getTempId(pinId: Int){
         viewModelScope.launch {
             repository.allPins.collect{ pins ->
                 _pinTemp.value = pins.values.find { it.localId == pinId }
             }
         }
-    }
+    }*/
 }
 
 class NewPinViewModelFactory(private val repository: JSONPlaceholderRepository) : ViewModelProvider.Factory {
