@@ -21,6 +21,7 @@ firebaseAuth = "23.1.0"
 playServicesAuth = "21.2.0"
 firebaseBom = "33.6.0"
 converterGson = "2.9.0"
+recyclerview = "1.1.0"
 
 [libraries]
 androidx-activity-ktx = { module = "androidx.activity:activity-ktx", version.ref = "activity" }
@@ -49,6 +50,7 @@ retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "converte
 firebase-auth = { group = "com.google.firebase", name = "firebase-auth", version.ref = "firebaseAuth" }
 play-services-auth = { module = "com.google.android.gms:play-services-auth", version.ref = "playServicesAuth" }
 converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "converterGson" }
+androidx-recyclerview = { group = "androidx.recyclerview", name = "recyclerview", version.ref = "recyclerview" }
 
 
 [plugins]

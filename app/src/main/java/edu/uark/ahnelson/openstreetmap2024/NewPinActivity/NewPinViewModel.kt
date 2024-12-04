@@ -1,11 +1,12 @@
-package edu.uark.ahnelson.openstreetmap2024.viewmodel
+package edu.uark.ahnelson.openstreetmap2024.NewPinActivity
 
+import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import edu.uark.ahnelson.openstreetmap2024.data.entity.Pin
+import edu.uark.ahnelson.openstreetmap2024.Repository.Pin
 import edu.uark.ahnelson.openstreetmap2024.Repository.JSONPlaceholderRepository
 import kotlinx.coroutines.launch
 

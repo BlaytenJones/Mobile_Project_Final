@@ -1,7 +1,7 @@
-package edu.uark.ahnelson.openstreetmap2024.activity
+package edu.uark.ahnelson.openstreetmap2024
 
 import android.app.Application
-import edu.uark.ahnelson.openstreetmap2024.data.JSONPlaceHolderDatabase
+import edu.uark.ahnelson.openstreetmap2024.Repository.JSONPlaceHolderDatabase
 import edu.uark.ahnelson.openstreetmap2024.Repository.JSONPlaceholderRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob

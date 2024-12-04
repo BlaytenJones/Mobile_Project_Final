@@ -49,6 +49,7 @@ dependencies {
 
     implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.room.ktx)
+    implementation(libs.androidx.recyclerview)
     annotationProcessor(libs.androidx.room.compiler)
     implementation(libs.firebase.firestore)
     implementation(libs.firebase.auth)

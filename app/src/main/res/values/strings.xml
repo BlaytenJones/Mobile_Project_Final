@@ -13,4 +13,5 @@
     <string name="inventory">Inventory</string>
     <string name="settings">settings</string>
     <string name="token_image">token_image</string>
+    <string name="generaterandtoken">GenerateRandToken</string>
 </resources>

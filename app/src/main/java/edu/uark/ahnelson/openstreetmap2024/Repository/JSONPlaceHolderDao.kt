@@ -1,4 +1,4 @@
-package edu.uark.ahnelson.openstreetmap2024.data
+package edu.uark.ahnelson.openstreetmap2024.Repository
 
 import androidx.room.Dao
 import androidx.room.Insert
@@ -7,9 +7,6 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
 import androidx.room.Update
-import edu.uark.ahnelson.openstreetmap2024.data.entity.MintedToken
-import edu.uark.ahnelson.openstreetmap2024.data.entity.Pin
-import edu.uark.ahnelson.openstreetmap2024.data.entity.User
 import kotlinx.coroutines.flow.Flow
 
 

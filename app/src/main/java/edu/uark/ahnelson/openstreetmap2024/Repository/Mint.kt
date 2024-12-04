@@ -1,4 +1,4 @@
-package edu.uark.ahnelson.openstreetmap2024.data.entity
+package edu.uark.ahnelson.openstreetmap2024.Repository
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity

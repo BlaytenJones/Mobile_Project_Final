@@ -1,4 +1,4 @@
-package edu.uark.ahnelson.openstreetmap2024.data.entity
+package edu.uark.ahnelson.openstreetmap2024.Repository
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
@@ -11,4 +11,12 @@ import java.io.Serializable
 data class MintedToken(
     @PrimaryKey @Expose @SerializedName("tokenId") @ColumnInfo(name="tokenId") val tokenId: Int,
     @Expose @SerializedName("mintNum") @ColumnInfo(name="mintNum") val mintNum: Int,
-):Serializable
+):Serializable{
+
+    fun toMap(): Map<String, Any> {
+        return mapOf(
+            "tokenId" to tokenId,
+            "mintNum" to mintNum
+        )
+    }
+}

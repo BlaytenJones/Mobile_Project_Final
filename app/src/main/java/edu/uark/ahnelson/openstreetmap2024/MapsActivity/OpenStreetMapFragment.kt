@@ -1,4 +1,4 @@
-package edu.uark.ahnelson.openstreetmap2024.activity.map
+package edu.uark.ahnelson.openstreetmap2024.MapsActivity
 
 import android.content.Intent
 import android.os.Bundle
@@ -10,9 +10,9 @@ import android.view.ViewGroup
 import androidx.appcompat.widget.AppCompatImageButton
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
-import edu.uark.ahnelson.openstreetmap2024.activity.CameraActivity
+import edu.uark.ahnelson.openstreetmap2024.NewPinActivity.CameraActivity
 import edu.uark.ahnelson.openstreetmap2024.R
-import edu.uark.ahnelson.openstreetmap2024.data.entity.Pin
+import edu.uark.ahnelson.openstreetmap2024.Repository.Pin
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.CustomZoomButtonsController

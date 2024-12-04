@@ -4,11 +4,13 @@ import android.util.Log
 import androidx.annotation.WorkerThread
 import com.google.firebase.Firebase
 import com.google.firebase.firestore.firestore
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.Flow
-import edu.uark.ahnelson.openstreetmap2024.data.JSONPlaceHolderDao
-import edu.uark.ahnelson.openstreetmap2024.data.entity.MintedToken
-import edu.uark.ahnelson.openstreetmap2024.data.entity.Pin
-import edu.uark.ahnelson.openstreetmap2024.data.entity.User
+import androidx.activity.viewModels
+import com.google.firebase.firestore.FieldValue
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 
 class JSONPlaceholderRepository(private val jsonPlaceHolderDao: JSONPlaceHolderDao) {
 
@@ -17,7 +19,7 @@ class JSONPlaceholderRepository(private val jsonPlaceHolderDao: JSONPlaceHolderD
 
     @Suppress("RedundantSuspendModifier")
     @WorkerThread
-    suspend fun updatePinInRoomDatabase(pin: Pin){
+    suspend fun updatePinInRoomDatabase(pin:Pin){
         jsonPlaceHolderDao.update(pin)
     }
 
@@ -29,7 +31,7 @@ class JSONPlaceholderRepository(private val jsonPlaceHolderDao: JSONPlaceHolderD
 
     @Suppress("RedundantSuspendModifier")
     @WorkerThread
-    suspend fun insertPinIntoRemoteDatasource(pin: Pin){
+    suspend fun insertPinIntoRemoteDatasource(pin:Pin){
         db.collection("pins")
             .add(pin)
             .addOnSuccessListener { documentReference ->
@@ -76,7 +78,7 @@ class JSONPlaceholderRepository(private val jsonPlaceHolderDao: JSONPlaceHolderD
 
     @Suppress("RedundantSuspendModifier")
     @WorkerThread
-    suspend fun updatePinInRemoteDatasource(pin: Pin){
+    suspend fun updatePinInRemoteDatasource(pin:Pin){
         val usersRef = db.collection("pins")
 
         // Query for the pin based on localId and uid
@@ -120,38 +122,40 @@ class JSONPlaceholderRepository(private val jsonPlaceHolderDao: JSONPlaceHolderD
 
     @Suppress("RedundantSuspendModifier")
     @WorkerThread
-    suspend fun addTokenToUser(user: User, mintedToken: MintedToken){
-        val usersRef = db.collection("pins")
+    suspend fun addTokenToUser(user: User, mintedToken: MintedToken) {
+        val usersRef = db.collection("users")
 
-        // Query for the pin based on localId and uid
-        Log.d("UPDATE", user.uid + " " + mintedToken.tokenId + " " + mintedToken.mintNum)
-        val query = usersRef
-            .whereEqualTo("uid", user.uid)
+        Log.d("UPDATE_TIME", "Attempting to update user: ${user.uid} with tokenId: ${mintedToken.tokenId} and mintNum: ${mintedToken.mintNum}")
+
+        val query = usersRef.whereEqualTo("uid", user.uid)
+
+        // Create a Map representation of the MintedToken
+        val tokenMap = mapOf(
+            "tokenId" to mintedToken.tokenId,
+            "mintNum" to mintedToken.mintNum
+        )
 
         try {
-            query.get().addOnSuccessListener { documents ->
-                if (!documents.isEmpty) {
-                    for (document in documents) {
-                        // Update the document with the new pin details
-                        val docRef = usersRef.document(document.id)
-                        docRef.update(
-                            mapOf(
-                                "inventory" to user.inventory.plus(mintedToken),
-                            )
-                        ).addOnSuccessListener {
-                            Log.d("UPDATE", "User updated successfully!")
-                        }.addOnFailureListener { e ->
-                            Log.e("UPDATE", "Error updating user: $e")
-                        }
-                    }
-                } else {
-                    Log.d("UPDATE", "No user found with matching uid.")
+            val documents = query.get().await()
+            if (!documents.isEmpty) {
+                for (document in documents) {
+                    val docRef = usersRef.document(document.id)
+                    Log.d("UPDATE_TIME", "Found document with ID: ${document.id}")
+
+                    // Add the token to the inventory as a map
+                    docRef.update("inventory", FieldValue.arrayUnion(tokenMap)).await()
+
+                    // Check the document data after update
+                    val docSnapshot = docRef.get().await()
+                    Log.d("UPDATE_TIME", "Updated document data: ${docSnapshot.data}")
+
+                    Log.d("UPDATE_TIME", "User updated successfully!")
                 }
-            }.addOnFailureListener { e ->
-                Log.e("UPDATE", "Error fetching documents: $e")
+            } else {
+                Log.d("UPDATE_TIME", "No user found with matching uid.")
             }
         } catch (e: Exception) {
-            Log.e("UPDATE", "Exception occurred: $e")
+            Log.e("UPDATE_TIME", "Error occurred during Firestore update: $e")
         }
     }
 

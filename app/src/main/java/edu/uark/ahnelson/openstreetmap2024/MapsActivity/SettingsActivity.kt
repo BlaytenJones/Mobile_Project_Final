@@ -1,4 +1,4 @@
-package edu.uark.ahnelson.openstreetmap2024.activity.settings
+package edu.uark.ahnelson.openstreetmap2024.MapsActivity
 
 import android.content.Intent
 import android.os.Bundle
@@ -11,7 +11,6 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import edu.uark.ahnelson.openstreetmap2024.R
-import edu.uark.ahnelson.openstreetmap2024.activity.auth.SignInActivity
 
 class SettingsActivity : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth
