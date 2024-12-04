@@ -42,9 +42,9 @@ class InventoryActivity : AppCompatActivity() {
         auth = Firebase.auth
         auth.currentUser
 
-        findViewById<Button>(R.id.button).setOnClickListener {
+        /*findViewById<Button>(R.id.button).setOnClickListener {
             generateToken()
-        }
+        }*/
 
         auth.currentUser?.uid?.let {
             userViewModel.fetchInventory(it) { tokens ->
@@ -54,8 +54,8 @@ class InventoryActivity : AppCompatActivity() {
         }
     }
 
-    private fun generateToken() {
+    /*private fun generateToken() {
         userViewModel.addTokenToInventory(auth.currentUser!!.uid, MintedToken((1..5).random(), (1..500).random()))
-    }
+    }*/
 
 }

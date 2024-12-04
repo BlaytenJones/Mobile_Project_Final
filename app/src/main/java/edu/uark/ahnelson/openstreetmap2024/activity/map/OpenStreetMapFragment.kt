@@ -7,12 +7,23 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.widget.AppCompatImageButton
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 import edu.uark.ahnelson.openstreetmap2024.activity.CameraActivity
 import edu.uark.ahnelson.openstreetmap2024.R
+import edu.uark.ahnelson.openstreetmap2024.activity.PinsApplication
+import edu.uark.ahnelson.openstreetmap2024.data.entity.MintedToken
 import edu.uark.ahnelson.openstreetmap2024.data.entity.Pin
+import edu.uark.ahnelson.openstreetmap2024.viewmodel.PinViewModel
+import edu.uark.ahnelson.openstreetmap2024.viewmodel.PinViewModelFactory
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.CustomZoomButtonsController
@@ -21,6 +32,7 @@ import org.osmdroid.views.overlay.*
 import org.osmdroid.views.overlay.compass.CompassOverlay
 import org.osmdroid.views.overlay.compass.InternalCompassOrientationProvider
 import org.osmdroid.views.overlay.gestures.RotationGestureOverlay
+import org.osmdroid.views.overlay.infowindow.InfoWindow
 import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay
 
@@ -52,6 +64,8 @@ class OpenStreetMapFragment : Fragment(), Marker.OnMarkerClickListener {
     private lateinit var mCompassOverlay: CompassOverlay
     private lateinit var cameraButton: AppCompatImageButton
     private var curLocation = GeoPoint(34.74, -92.28)
+    private lateinit var userViewModel: PinViewModel
+    private lateinit var auth: FirebaseAuth
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -61,6 +75,11 @@ class OpenStreetMapFragment : Fragment(), Marker.OnMarkerClickListener {
         val root = inflater.inflate(R.layout.fragment_open_street_map, container, false)
         mMap = root.findViewById(R.id.map)
         cameraButton = root.findViewById(R.id.imageButton)
+
+        userViewModel = ViewModelProvider(this, PinViewModelFactory((requireActivity().application as PinsApplication).repository)).get(PinViewModel::class.java)
+
+        auth = Firebase.auth
+        auth.currentUser
 
         cameraButton.setOnClickListener {
             val intent = Intent(requireActivity(), CameraActivity::class.java)
@@ -83,7 +102,22 @@ class OpenStreetMapFragment : Fragment(), Marker.OnMarkerClickListener {
     override fun onResume() {
         super.onResume()
         mMap.onResume()
+        refreshPins()
     }
+
+    private fun refreshPins() {
+        userViewModel.getPinsFromRemoteDatasource { retrievedPins ->
+            if (retrievedPins.isNotEmpty()) {
+                clearMarkers()
+                retrievedPins.forEach { pin ->
+                    addMarker(pin)
+                }
+            } else {
+                Log.d("PinData", "No pins retrieved")
+            }
+        }
+    }
+
 
     override fun onPause() {
         super.onPause()
@@ -147,14 +181,59 @@ class OpenStreetMapFragment : Fragment(), Marker.OnMarkerClickListener {
 
     fun addMarker(pin: Pin) {
         val geoPoint = GeoPoint(pin.lat, pin.lon)
-        val startMarker = Marker(mMap)
-        startMarker.position = geoPoint
-        startMarker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM)
-        startMarker.setOnMarkerClickListener(this)
-        startMarker.id = id.toString()
-        startMarker.relatedObject = pin
-        startMarker.icon = ResourcesCompat.getDrawable(resources, R.drawable.map_pin_small, null)
-        mMap.overlays.add(startMarker)
+        val marker = Marker(mMap)
+        marker.position = geoPoint
+        marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM)
+        marker.icon = ResourcesCompat.getDrawable(resources, R.drawable.map_pin_small, null)
+        marker.relatedObject = pin
+
+        marker.infoWindow = object : InfoWindow(R.layout.marker_popup, mMap) {
+            override fun onOpen(item: Any?) {
+                val view = mView
+                val pinData = marker.relatedObject as? Pin ?: return
+                view.findViewById<TextView>(R.id.marker_desc).text = pinData.desc
+
+                // Set up Generate Token button
+                val generateButton = view.findViewById<Button>(R.id.generate_token_button)
+                generateButton.setOnClickListener {
+                    generateToken(pin)
+                    // Remove marker after generating the token
+                    //mMap.overlays.remove(marker)
+                    mMap.invalidate() // Refresh the map
+                    close() // Close the info window
+                }
+            }
+
+            override fun onClose() {
+                // Hide the info window when dismissed
+            }
+        }
+
+        marker.setOnMarkerClickListener { _, _ ->
+            if (marker.isInfoWindowShown) {
+                marker.closeInfoWindow() // Close if already open
+            } else {
+                marker.showInfoWindow() // Show the info window
+            }
+            true // Indicate the event was handled
+        }
+
+        mMap.overlays.add(marker)
+    }
+
+
+    private fun generateToken(pin: Pin) {
+        // Add the token to the inventory
+        userViewModel.addTokenToInventory(auth.currentUser!!.uid, MintedToken((1..5).random(), (1..500).random()))
+
+        // Remove the pin associated with the generated token
+        /*userViewModel.removePinFromDataSource(pin) { success ->
+            if (success) {
+                Log.d("PinViewModel", "Pin successfully removed!")
+            } else {
+                Log.d("PinViewModel", "Error removing pin")
+            }
+        }*/
     }
 
     fun clearMarkers() {
@@ -172,7 +251,8 @@ class OpenStreetMapFragment : Fragment(), Marker.OnMarkerClickListener {
         }
     }*/
 
-    override fun onMarkerClick(marker: Marker?, mapView: MapView?): Boolean {
+    // Could use intents to provide more data in pins
+    /*override fun onMarkerClick(marker: Marker?, mapView: MapView?): Boolean {
         marker?.id?.let { Log.d("OpenStreetMapFragment", it) }
         val intent = Intent(requireActivity(), CameraActivity::class.java)
         //determine if the marker was made during the lifetime
@@ -195,6 +275,12 @@ class OpenStreetMapFragment : Fragment(), Marker.OnMarkerClickListener {
         CameraActivity.registerRefreshCallback(::triggerRefresh)
         startActivity(intent)
         return true
+    }*/
+
+    // marker click for generating tokens without QR or extra data
+    override fun onMarkerClick(marker: Marker?, mapView: MapView?): Boolean {
+        marker?.showInfoWindow()
+        return true // Return true to indicate the click was handled
     }
 
     companion object {

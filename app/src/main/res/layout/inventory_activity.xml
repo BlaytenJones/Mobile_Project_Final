@@ -8,18 +8,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".activity.inventory.InventoryActivity">
 
-    <Button
-        android:id="@+id/button"
-        android:layout_width="418dp"
-        android:layout_height="52dp"
-        android:layout_marginBottom="8dp"
-        android:text="@string/generaterandtoken"
-        app:layout_constraintBottom_toTopOf="@+id/recyclerViewInventory"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewInventory"
         android:layout_width="363dp"
@@ -32,7 +20,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button"
+        app:layout_constraintTop_toTopOf="parent"
         tools:listitem="@layout/item_inventory_token" />
 
     <androidx.fragment.app.FragmentContainerView
@@ -43,6 +31,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/recyclerViewInventory" />
+        app:layout_constraintTop_toBottomOf="@+id/recyclerViewInventory"
+        tools:layout="@layout/fragment_bottom_bar" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

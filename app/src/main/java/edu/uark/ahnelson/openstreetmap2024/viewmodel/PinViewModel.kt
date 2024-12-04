@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.Firebase
+import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.firestore
 import edu.uark.ahnelson.openstreetmap2024.data.entity.Pin
 import edu.uark.ahnelson.openstreetmap2024.Repository.JSONPlaceholderRepository
@@ -67,12 +68,6 @@ class PinViewModel(private val repository: JSONPlaceholderRepository) : ViewMode
                 onResult(null) // Pass null for error
             }
     }
-
-
-
-
-
-
 
     fun getPinsFromRemoteDatasource(onResult: (List<Pin>) -> Unit) {
         db.collection("pins")
@@ -141,6 +136,19 @@ class PinViewModel(private val repository: JSONPlaceholderRepository) : ViewMode
         }
     }
 
+/*    fun removePinFromDataSource(pin: Pin, callback: (Boolean) -> Unit) {
+    // Implement the logic to remove the pin from your data source
+    // For example, if you are using Firestore:
+        db.collection("pins").document(pin.id.toString()).delete()
+            .addOnSuccessListener {
+                Log.d("PinViewModel", "Pin successfully removed!")
+                callback(true)
+            }
+            .addOnFailureListener { e ->
+                Log.w("PinViewModel", "Error removing pin", e)
+                callback(false)
+            }
+    }*/
 }
 
 class PinViewModelFactory(private val repository: JSONPlaceholderRepository) : ViewModelProvider.Factory {
